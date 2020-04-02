@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 
 /**
  * 谷歌动态令牌
- * @author Mr.Chen
+ * @author 大誌
  *
  */
 public class DynamicToken {
@@ -36,10 +36,14 @@ public class DynamicToken {
      */
     public String getDynamicCode(String key,long systemTime,int invertal) throws Exception{
         byte[] data;
-        data = sha1(key,(systemTime+invertal)/30000);//sha1生成 20字节（160位）的数据摘要
-        int o = data[19]& 0xf;//通过对最后一个字节的低4位二进制位建立索引，索引范围为  （0-15）+4  ，正好20个字节。
-        int number = hashToInt(data, o)& 0x7fffffff;  //然后计算索引指向的连续4字节空间生成int整型数据。
-        return output(String.valueOf(number%1000000));//对获取到的整型数据进行模运算，再对结果进行补全（长度不够6位，在首位补零）得到长度为6的字符串
+        //sha1生成 20字节（160位）的数据摘要
+        data = sha1(key,(systemTime+invertal)/30000);
+        //通过对最后一个字节的低4位二进制位建立索引，索引范围为  （0-15）+4  ，正好20个字节。
+        int o = data[19]& 0xf;
+        //然后计算索引指向的连续4字节空间生成int整型数据。
+        int number = hashToInt(data, o)& 0x7fffffff;
+        //对获取到的整型数据进行模运算，再对结果进行补全（长度不够6位，在首位补零）得到长度为6的字符串
+        return output(String.valueOf(number%1000000));
     }
     /**
      * 获取 动态口令
@@ -48,6 +52,7 @@ public class DynamicToken {
     public String getDynamicCode(String key,long systemTime) throws Exception{
         return getDynamicCode(key, systemTime, invertal);
     }
+
     /**
      * 获取 动态口令
      * @throws Exception
@@ -119,7 +124,6 @@ public class DynamicToken {
     }
     public static void main(String[] args) {
         DynamicToken dt = new DynamicToken("ABCEDFGHIJKLMNO");
-
         try {
             String dynamicCode = dt.getDynamicCode();
             System.out.println(dynamicCode);

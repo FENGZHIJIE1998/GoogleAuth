@@ -60,7 +60,6 @@ public class AuthInterceptor implements HandlerInterceptor {
         httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
         httpResponse.setHeader("Access-Control-Allow-Origin", HttpContextUtil.getOrigin());
         httpResponse.setCharacterEncoding("UTF-8");
-        httpResponse.setStatus(400);
         response.setContentType("application/json;charset=utf-8");
         Result build = Result.build(status, msg);
         String json = JSON.toJSONString(build);
